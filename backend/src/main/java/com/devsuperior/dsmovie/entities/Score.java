@@ -5,29 +5,24 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tb_score")
-public class Score implements Serializable {
+public class Score  {
 
     @EmbeddedId
     private ScorePK id = new ScorePK();
     private Double value;
 
-    public Score (){
-
+    public Score(){
     }
-
-    public void setMovie(Movie movie) {
+    public void setMovie(Movie movie){
         id.setMovie(movie);
     }
-
     public void setUser(User user){
         id.setUser(user);
     }
-
-    public ScorePK getId() {
+    public ScorePK getId(){
         return id;
     }
-
-    public void setId(ScorePK id) {
+    public void setId(ScorePK id){
         this.id = id;
     }
 

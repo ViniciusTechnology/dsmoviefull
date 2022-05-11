@@ -17,6 +17,7 @@ public class ScorePK implements Serializable {
     private User user;
 
     public ScorePK (){
+
     }
 
     public Movie getMovie() {
