@@ -1,9 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import './styles.css';
 import {Movie} from 'types/movie';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import axios,{AxiosRequestConfig} from 'axios';
 import { BASE_URL } from 'utils/requests';
+import { validateEmail } from 'utils/validate';
 
 
 type props = {
@@ -11,6 +12,8 @@ type props = {
 }
 
 function FormCard ({movieId}: props) {
+
+    const navigate = useNavigate();
 
     const [movie, setMovie] = useState<Movie>();
 
@@ -21,6 +24,37 @@ function FormCard ({movieId}: props) {
         },)
     },[movieId]);
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) =>{
+
+        event.preventDefault();
+
+        const email = (event.target as any).email.value;
+        const score = (event.target as any).score.value;
+
+        if(!validateEmail(email)){
+
+            return;
+
+        }
+
+        const config: AxiosRequestConfig = {
+            baseURL: BASE_URL,
+            method: 'PUT',
+            url: '/scores',
+            data: {
+                email: email,
+                movieId: movieId,
+                score: score
+            }
+        }
+
+        axios(config).then(response => {
+
+            console.log(response.data);
+            navigate("/")
+        });
+
+    }
     
     return(
 
@@ -28,7 +62,7 @@ function FormCard ({movieId}: props) {
         <img className="dsmovie-movie-card-image" src={movie?.image} alt={movie?.title} />
         <div className="dsmovie-card-bottom-container">
             <h3>{movie?.title}</h3>
-            <form className="dsmovie-form">
+            <form className="dsmovie-form" onSubmit={handleSubmit}>
                 <div className="form-group dsmovie-form-group">
                     <label htmlFor="email">Informe seu email</label>
                     <input type="email" className="form-control" id="email" />
